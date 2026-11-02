@@ -1,0 +1,298 @@
+[
+  {
+    "id": "intro",
+    "file": "intro",
+    "group": "root",
+    "label": "OPENING TRANSMISSION",
+    "purpose": "Main introduction (plays when the visitor presses START QUEST)",
+    "text": "Hey, welcome to my world. I'm Akash. Instead of handing you a resume, I thought I'd let you explore my story yourself. There are four worlds here. Each one reveals a different part of me. Your voice is your controller. Speak naturally, and let your voice do the typing. Ready? Let's begin the Growth Quest."
+  },
+  {
+    "id": "quest_complete",
+    "file": "final_message",
+    "group": "root",
+    "label": "FINAL TRANSMISSION",
+    "purpose": "Final message after all four worlds are cleared",
+    "text": "You did it. All four worlds. All four versions of me. The experimenter, the builder, the strategist, and the growth hacker. But here's the secret: the real game starts now. India has millions of voices. Let's help them do more with theirs. Let's build something India talks about."
+  },
+  {
+    "id": "level1_intro",
+    "file": "level1/intro",
+    "group": "level1",
+    "label": "LEVEL 1 // ORIGIN WORLD",
+    "purpose": "Level 1 narration when the level opens",
+    "text": "Welcome to the Origin World. Swiper is after three pieces of my story. Your job is simple: stop him with the magic words."
+  },
+  {
+    "id": "level1_instructions",
+    "file": "level1/instructions",
+    "group": "level1",
+    "label": "LEVEL 1 // BRIEFING",
+    "purpose": "Level 1 rules, plays after the intro and on REPLAY BRIEFING",
+    "text": "When Swiper lunges, you get twenty seconds. Say it before the timer hits zero: Swiper, no swiping! Three rounds. Protect all three memories."
+  },
+  {
+    "id": "level1_win",
+    "file": "level1/win",
+    "group": "level1",
+    "label": "LEVEL 1 // VICTORY",
+    "purpose": "Swiper defeated",
+    "text": "You did it! Swiper is gone, and my memories are safe. You know, those three objects he wanted to steal? They're real. My first experiment, my biggest achievement, and my hardest lesson. Let me tell you the story behind them."
+  },
+  {
+    "id": "level1_fail",
+    "file": "level1/fail",
+    "group": "level1",
+    "label": "LEVEL 1 // DEFEAT",
+    "purpose": "Swiper escaped",
+    "text": "Oh no, Swiper got away with it! Don't worry, even I lost a few battles before I learned the magic words. Shake it off and try again. He's already coming back."
+  },
+  {
+    "id": "level1_story",
+    "file": "level1/story",
+    "group": "level1",
+    "label": "LEVEL 1 // THE STORY",
+    "purpose": "Personal story unlocked by winning Level 1 (plays on the KNOW ME page)",
+    "text": "So here's the truth. I'm studying computer science at Heritage Institute of Technology in Kolkata. This summer I interned as an AI engineer at IntelGrader. But the real story is the hackathons, and the things I kept building after them. Every one taught me something. Some became products. Some became lessons."
+  },
+  {
+    "id": "swiper_approach",
+    "file": "level1/swiper_approach",
+    "group": "level1",
+    "label": "AKASH // REACTION",
+    "purpose": "Swiper sneaks in at the start of each round",
+    "text": "There he is! Swiper's sneaking toward one of my memories. Quick, say the magic words!"
+  },
+  {
+    "id": "swiper_celebration",
+    "file": "level1/swiper_celebration",
+    "group": "level1",
+    "label": "AKASH // REACTION",
+    "purpose": "Swiper celebrates after stealing a memory (defeat)",
+    "text": "Oh no! Swiper grabbed it, and he's celebrating. Don't worry, shake it off. We'll get it back."
+  },
+  {
+    "id": "swiper_repelled",
+    "file": "level1/swiper_repelled",
+    "group": "level1",
+    "label": "AKASH // REACTION",
+    "purpose": "Extra: visitor said the magic words correctly",
+    "text": "Yes! Perfect. Swiper hates that."
+  },
+  {
+    "id": "magic_words_hint",
+    "file": "level1/magic_words_hint",
+    "group": "level1",
+    "label": "AKASH // REACTION",
+    "purpose": "Extra: visitor got the magic words wrong",
+    "text": "Not quite! Say it with me: Swiper, no swiping!"
+  },
+  {
+    "id": "level2_intro",
+    "file": "level2/intro",
+    "group": "level2",
+    "label": "LEVEL 2 // BUILDER'S ARENA",
+    "purpose": "Level 2 narration when the level opens",
+    "text": "Ah, a new challenger! Welcome to the Builder's Arena. Professor Oak needs a new trainer, but before you can explore my builds, you must prove you understand the art of choosing the right Pokémon for the right opponent."
+  },
+  {
+    "id": "level2_instructions",
+    "file": "level2/instructions",
+    "group": "level2",
+    "label": "LEVEL 2 // BRIEFING",
+    "purpose": "Level 2 rules",
+    "text": "Two battles against random opponents. Pick your Pokémon and your attack by speaking or tapping. Type matchups matter, and the Hints button is there if you're stuck."
+  },
+  {
+    "id": "level2_win",
+    "file": "level2/win",
+    "group": "level2",
+    "label": "LEVEL 2 // VICTORY",
+    "purpose": "Both Pokémon battles won",
+    "text": "Two for two! You're a natural trainer. Professor Oak is impressed, and honestly, so am I. Now you get to see what I've actually built. Every project here started as a what-if and ended as a working product."
+  },
+  {
+    "id": "level2_fail",
+    "file": "level2/fail",
+    "group": "level2",
+    "label": "LEVEL 2 // DEFEAT",
+    "purpose": "A Pokémon battle was lost",
+    "text": "Your Pokémon fought bravely, but the academy demands two wins. Study the type chart, pick a smarter matchup, and challenge Oak again. The builds are worth it, I promise."
+  },
+  {
+    "id": "level2_story",
+    "file": "level2/story",
+    "group": "level2",
+    "label": "LEVEL 2 // THE STORY",
+    "purpose": "Personal story unlocked by winning Level 2 (plays on the MY BUILDS page)",
+    "text": "These are my builds. Chronos, a market simulator where your order moves the price. Kalakriti, a marketplace for artisans. DealFlow360, which made the Odoo finals. Reflow, an agent that recovers failed payments. And a lot more. Watch the demos."
+  },
+  {
+    "id": "battle_start",
+    "file": "level2/battle_start",
+    "group": "level2",
+    "label": "AKASH // BATTLE",
+    "purpose": "A Pokémon battle begins",
+    "text": "Here we go! The right type changes everything. Pick your move wisely."
+  },
+  {
+    "id": "attack",
+    "file": "level2/attack",
+    "group": "level2",
+    "label": "AKASH // BATTLE",
+    "purpose": "Player's Pokémon launches an attack (short clip, low priority)",
+    "text": "Go! Use your best move!"
+  },
+  {
+    "id": "damage",
+    "file": "level2/damage",
+    "group": "level2",
+    "label": "AKASH // BATTLE",
+    "purpose": "Player's Pokémon takes damage (short clip, low priority)",
+    "text": "Ouch! That one hurt. Stay focused!"
+  },
+  {
+    "id": "faint",
+    "file": "level2/faint",
+    "group": "level2",
+    "label": "AKASH // BATTLE",
+    "purpose": "A Pokémon faints",
+    "text": "And down it goes! That's the end of this round."
+  },
+  {
+    "id": "super_effective",
+    "file": "level2/super_effective",
+    "group": "level2",
+    "label": "AKASH // BATTLE",
+    "purpose": "Player lands a super-effective hit",
+    "text": "It's super effective! That's exactly the matchup I was hoping you'd find."
+  },
+  {
+    "id": "not_very_effective",
+    "file": "level2/not_very_effective",
+    "group": "level2",
+    "label": "AKASH // BATTLE",
+    "purpose": "Player's hit is not very effective",
+    "text": "Not very effective. Think about the type chart and try a different move."
+  },
+  {
+    "id": "level3_intro",
+    "file": "level3/intro",
+    "group": "level3",
+    "label": "LEVEL 3 // MIND DUNGEON",
+    "purpose": "Level 3 narration when the level opens",
+    "text": "Welcome to the Mind Dungeon, shinobi. You've been selected for a dangerous mission. Limited resources, unpredictable enemies, and a deadline. Strength alone won't save you here. Your decisions will."
+  },
+  {
+    "id": "level3_instructions",
+    "file": "level3/instructions",
+    "group": "level3",
+    "label": "LEVEL 3 // BRIEFING",
+    "purpose": "Level 3 rules",
+    "text": "Five stages. Pick a plan. Spend your hundred chakra. Then adapt when something goes wrong, and see how it played out."
+  },
+  {
+    "id": "level3_win",
+    "file": "level3/win",
+    "group": "level3",
+    "label": "LEVEL 3 // VICTORY",
+    "purpose": "Mission passed",
+    "text": "Mission complete. You think like a strategist: observe first, spend resources carefully, and adapt when the plan breaks. That's genuinely how I approach every problem I build my way through."
+  },
+  {
+    "id": "level3_fail",
+    "file": "level3/fail",
+    "group": "level3",
+    "label": "LEVEL 3 // DEFEAT",
+    "purpose": "Mission failed",
+    "text": "The mission failed this time. A good shinobi reviews the plan, not the luck. Check the scoring, rethink your resource allocation, and run the mission again."
+  },
+  {
+    "id": "level3_story",
+    "file": "level3/story",
+    "group": "level3",
+    "label": "LEVEL 3 // THE STORY",
+    "purpose": "Personal story unlocked by winning Level 3 (plays on the MY MIND page)",
+    "text": "People ask how I think. Here's a real one. In Chronos, my trained trading agents all drifted to the same short position, and nothing threw an error. So I recomputed what the models actually saw. Four of six inputs were stuck at the clip limit. Before I blame the model, I check its inputs."
+  },
+  {
+    "id": "mission_alert",
+    "file": "level3/mission_alert",
+    "group": "level3",
+    "label": "AKASH // ALERT",
+    "purpose": "Stage 3 unexpected event when no shadow clones were chosen",
+    "text": "Alert! The enemy has changed their patrol. Your original plan might not work anymore. What will you do?"
+  },
+  {
+    "id": "worried_reaction",
+    "file": "level3/worried_reaction",
+    "group": "level3",
+    "label": "AKASH // ALERT",
+    "purpose": "Stage 3 unexpected event: a shadow clone was spotted",
+    "text": "Wait! Something went wrong. One of your shadow clones has been spotted. Your original plan might not work anymore. What will you do?"
+  },
+  {
+    "id": "success_reaction",
+    "file": "level3/success_reaction",
+    "group": "level3",
+    "label": "AKASH // REACTION",
+    "purpose": "Stage 4: the visitor's adaptation worked",
+    "text": "Phew! That was a smart recovery. You adapted, kept your cool, and the mission is still alive."
+  },
+  {
+    "id": "level4_intro",
+    "file": "level4/intro",
+    "group": "level4",
+    "label": "LEVEL 4 // GROWTH KINGDOM",
+    "purpose": "Level 4 narration when the level opens",
+    "text": "This is it. The Growth Kingdom. You're now the Growth Saiyan of Wispr Flow India. Your mission: introduce voice-first productivity to one hundred thousand people. Thirty days. A limited budget. One chance to build a campaign people actually talk about."
+  },
+  {
+    "id": "level4_instructions",
+    "file": "level4/instructions",
+    "group": "level4",
+    "label": "LEVEL 4 // BRIEFING",
+    "purpose": "Level 4 rules",
+    "text": "Five stages. Choose your audience. Split a one-lakh budget. Handle an unexpected event. Then build your pitch for Wispr Flow. Score high enough and I'll show you my real plan."
+  },
+  {
+    "id": "level4_win",
+    "file": "level4/win",
+    "group": "level4",
+    "label": "LEVEL 4 // VICTORY",
+    "purpose": "Campaign reached full power",
+    "text": "Kamehameha! You powered the campaign all the way up. That was genuinely impressive growth thinking. And now, as promised, here is my actual proposal. Not a game. A real campaign I would run. Speak India. Play Different."
+  },
+  {
+    "id": "level4_fail",
+    "file": "level4/fail",
+    "group": "level4",
+    "label": "LEVEL 4 // DEFEAT",
+    "purpose": "Campaign did not reach full power",
+    "text": "The campaign didn't reach full power. Growth is iteration: sharpen the audience, rebalance the budget, and rewrite that pitch with a hook, a promise, and a call to action. Go again."
+  },
+  {
+    "id": "level4_story",
+    "file": "level4/story",
+    "group": "level4",
+    "label": "LEVEL 4 // THE STORY",
+    "purpose": "Personal story unlocked by winning Level 4 (plays on the real campaign page)",
+    "text": "Here's my real answer. India has a billion voices. Campus challenges where students speak their assignments. Creators dictating in their own languages. A seven-day speak challenge people share. Every finisher recruits three friends."
+  },
+  {
+    "id": "energy_charge",
+    "file": "level4/energy_charge",
+    "group": "level4",
+    "label": "AKASH // CHARGE",
+    "purpose": "The campaign energy meter starts charging",
+    "text": "Feel that energy? The campaign is charging. Hold on, it's about to get powerful!"
+  },
+  {
+    "id": "kamehameha",
+    "file": "level4/kamehameha",
+    "group": "level4",
+    "label": "AKASH // KAMEHAMEHA",
+    "purpose": "Visitor releases the Kamehameha",
+    "text": "Ka-me-ha-me-ha! Full power! This campaign is going to reach a hundred thousand people."
+  }
+]

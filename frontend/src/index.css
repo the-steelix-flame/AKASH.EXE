@@ -1,0 +1,234 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 222 39% 5%;
+    --foreground: 120 20% 96%;
+    --card: 222 30% 8%;
+    --card-foreground: 120 20% 96%;
+    --popover: 222 30% 8%;
+    --popover-foreground: 120 20% 96%;
+    --primary: 114 100% 54%;
+    --primary-foreground: 222 39% 5%;
+    --secondary: 222 20% 14%;
+    --secondary-foreground: 120 20% 96%;
+    --muted: 222 20% 14%;
+    --muted-foreground: 220 10% 60%;
+    --accent: 187 100% 50%;
+    --accent-foreground: 222 39% 5%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 222 18% 18%;
+    --input: 222 18% 18%;
+    --ring: 114 100% 54%;
+    --radius: 0.5rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html {
+    background: #090c15;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  ::selection {
+    background: rgba(57, 255, 20, 0.35);
+    color: #fff;
+  }
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #090c15;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #1e293b;
+    border-radius: 8px;
+    border: 2px solid #090c15;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #39ff14;
+  }
+}
+
+@layer base {
+  [data-debug-wrapper="true"] {
+    display: contents !important;
+  }
+  [data-debug-wrapper="true"] > * {
+    margin-left: inherit;
+    margin-right: inherit;
+    margin-top: inherit;
+    margin-bottom: inherit;
+    padding-left: inherit;
+    padding-right: inherit;
+    padding-top: inherit;
+    padding-bottom: inherit;
+    column-gap: inherit;
+    row-gap: inherit;
+    gap: inherit;
+    border-left-width: inherit;
+    border-right-width: inherit;
+    border-top-width: inherit;
+    border-bottom-width: inherit;
+    border-left-style: inherit;
+    border-right-style: inherit;
+    border-left-color: inherit;
+    border-right-color: inherit;
+    border-top-color: inherit;
+    border-bottom-color: inherit;
+  }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: "Unbounded", sans-serif;
+  }
+  .text-glow-lime {
+    text-shadow: 0 0 12px rgba(57, 255, 20, 0.55), 0 0 42px rgba(57, 255, 20, 0.25);
+  }
+  .text-glow-cyan {
+    text-shadow: 0 0 12px rgba(0, 240, 255, 0.55), 0 0 42px rgba(0, 240, 255, 0.22);
+  }
+  .text-glow-purple {
+    text-shadow: 0 0 12px rgba(168, 85, 247, 0.6), 0 0 42px rgba(168, 85, 247, 0.25);
+  }
+  /* Panels are solid (no backdrop-filter): blur on many panels is the #1 cause of scroll lag. */
+  .hud-panel {
+    @apply bg-slate-950/95 border border-lime-400/20;
+    box-shadow: 0 0 18px rgba(57, 255, 20, 0.08), inset 0 0 24px rgba(57, 255, 20, 0.03);
+  }
+  .hud-panel-cyan {
+    @apply bg-slate-950/95 border border-cyan-400/25;
+    box-shadow: 0 0 18px rgba(0, 240, 255, 0.08);
+  }
+  .hud-panel-purple {
+    @apply bg-slate-950/95 border border-purple-400/25;
+    box-shadow: 0 0 18px rgba(168, 85, 247, 0.1);
+  }
+  /* Static CRT lines. No mix-blend-mode: a full-screen blended layer is re-composited on every scroll frame. */
+  .scanlines::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 60;
+    background: repeating-linear-gradient(
+      0deg,
+      rgba(255, 255, 255, 0.018) 0px,
+      rgba(255, 255, 255, 0.018) 1px,
+      transparent 1px,
+      transparent 4px
+    );
+  }
+  .grid-floor {
+    background-image:
+      linear-gradient(rgba(57, 255, 20, 0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(57, 255, 20, 0.06) 1px, transparent 1px);
+    background-size: 44px 44px;
+    mask-image: radial-gradient(ellipse 90% 70% at 50% 40%, black 30%, transparent 75%);
+  }
+  .marquee-track {
+    animation: marquee 28s linear infinite;
+  }
+  .flicker {
+    animation: flicker 3.4s linear infinite;
+  }
+  .pulse-ring {
+    animation: pulse-ring 1.6s ease-out infinite;
+  }
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  3% { opacity: 0.6; }
+  6% { opacity: 1; }
+  54% { opacity: 1; }
+  56% { opacity: 0.4; }
+  58% { opacity: 1; }
+}
+
+@keyframes pulse-ring {
+  0% { box-shadow: 0 0 0 0 rgba(57, 255, 20, 0.45); }
+  80% { box-shadow: 0 0 0 14px rgba(57, 255, 20, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(57, 255, 20, 0); }
+}
+
+/* ---- voice input: "text is arriving" bars (transform only) ---- */
+.voice-bar { animation: voice-bar 0.7s ease-in-out infinite; transform: scaleY(0.25); }
+@keyframes voice-bar {
+  0%, 100% { transform: scaleY(0.25); }
+  50% { transform: scaleY(1); }
+}
+
+/* ---- scroll cue ---- */
+.scroll-bob { animation: scroll-bob 1.6s ease-in-out infinite; }
+@keyframes scroll-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(6px); }
+}
+
+/* ---- world map: everything is transform / opacity / dash-offset, and pauses off-screen ---- */
+/* Keep focused inputs clear of the fixed nav + sticky level bar when the browser scrolls them into view. */
+html { scroll-padding-top: 120px; scroll-padding-bottom: 24px; }
+#world-map { scroll-margin-top: -64px; } /* net 56px: scroll-padding (120) - 64 */
+.wm-waves { animation: wm-waves 14s linear infinite; }
+.wm-flow { animation: wm-flow 1.4s linear infinite; }
+.wm-orbit { transform-box: fill-box; transform-origin: center; animation: wm-orbit 60s linear infinite; }
+.wm-twinkle { animation: wm-twinkle 2.4s ease-in-out infinite; }
+.wm-cloud { animation: wm-cloud 80s linear infinite; }
+.wm-pulse { animation: wm-pulse 1.8s ease-out infinite; }
+.wm-beam { animation: wm-beam 2.4s ease-in-out infinite; }
+.wm-mist { animation: wm-mist 18s ease-in-out infinite alternate; }
+.wm-root:not(.wm-live) .wm-anim { animation-play-state: paused; }
+@keyframes wm-waves { to { transform: translateX(160px); } }
+@keyframes wm-flow { to { stroke-dashoffset: -46; } }
+@keyframes wm-orbit { to { transform: rotate(360deg); } }
+@keyframes wm-twinkle { 0%, 100% { opacity: 0.35; } 50% { opacity: 1; } }
+@keyframes wm-cloud { from { transform: translateX(-160px); } to { transform: translateX(1200px); } }
+@keyframes wm-beam { 0%, 100% { opacity: 0.35; } 50% { opacity: 0.9; } }
+@keyframes wm-mist { from { transform: translateX(-26px); } to { transform: translateX(26px); } }
+@keyframes wm-pulse { from { transform: scale(1); opacity: 0.85; } to { transform: scale(1.75); opacity: 0; } }
+
+/* ---- Pokémon arena background ---- */
+.arena-clouds {
+  width: 200%;
+  background-image:
+    radial-gradient(ellipse 58px 13px at 12% 35%, rgba(255, 255, 255, 0.22), transparent 70%),
+    radial-gradient(ellipse 80px 15px at 42% 62%, rgba(255, 255, 255, 0.16), transparent 70%),
+    radial-gradient(ellipse 50px 11px at 78% 30%, rgba(255, 255, 255, 0.2), transparent 70%);
+  background-size: 25% 100%;
+  animation: arena-drift 46s linear infinite;
+}
+.arena-floor { overflow: hidden; background: linear-gradient(180deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.35)); }
+.arena-floor::before {
+  content: "";
+  position: absolute;
+  inset: 0 -60px;
+  background: repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.07) 0 2px, transparent 2px 60px);
+  animation: arena-floor 2.4s linear infinite;
+}
+.arena-paused, .arena-paused::before { animation-play-state: paused; }
+@keyframes arena-drift { to { transform: translateX(-50%); } }
+@keyframes arena-floor { to { transform: translateX(-60px); } }
+
+/* ---- respect reduced-motion preferences ---- */
+@media (prefers-reduced-motion: reduce) {
+  .wm-anim, .voice-bar, .scroll-bob, .arena-clouds, .arena-floor::before, .marquee-track, .flicker, .pulse-ring {
+    animation: none !important;
+  }
+}

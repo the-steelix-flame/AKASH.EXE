@@ -1,0 +1,106 @@
+{
+  "project_name": "Akash.exe: The Growth Quest",
+  "app_type": "gamified_interactive_portfolio_3d_experience",
+  "target_audience": "Wispr Flow India Hiring Team",
+  "narrator": "Akash",
+  "visual_direction": {
+    "theme": "Dark Futuristic Anime RPG HUD",
+    "background_base": "Deep Charcoal & Void (#090C15 / #0B0F19)",
+    "primary_accent": "Electric Lime Green (#39FF14 / #22C55E)",
+    "secondary_accents": {
+      "electric_blue": "#00F0FF",
+      "cyber_purple": "#A855F7",
+      "warning_amber": "#F59E0B",
+      "battle_crimson": "#EF4444"
+    },
+    "surfaces": "Glassmorphism dark overlays (bg-slate-900/80 backdrop-blur-md border border-lime-500/20 shadow-[0_0_15px_rgba(57,255,20,0.15)])",
+    "effects": "Glowing neon borders, scanlines overlay, particle starfield, interactive audio waveform visualizer"
+  },
+  "typography": {
+    "heading_font": "Unbounded / Press Start 2P / Orbitron / Rajdhani",
+    "body_font": "JetBrains Mono / Fira Code / Inter",
+    "h1_hero": "text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white drop-shadow-[0_0_12px_rgba(57,255,20,0.4)]",
+    "h2_section": "text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-emerald-400",
+    "h3_card": "text-xl sm:text-2xl font-bold text-cyan-300",
+    "overline": "text-xs uppercase tracking-[0.25em] text-lime-400 font-mono font-semibold"
+  },
+  "layout_and_architecture": {
+    "landing_hero": "Cinematic Intro Splash with 'ENTER THE QUEST' animated prompt, Narrator Akash voice waveform greeting, sound toggle, & quest stats.",
+    "rpg_world_map": "4 Level Cards (Interactive RPG Quest Hub with Locked/Unlocked/Completed states, status badges, difficulty meters, & completion progress 0-100%).",
+    "audio_player_hud": "Fixed top/bottom Audio Narration bar with Web Audio waveform visualizer, dynamic subtitles/captions, play/pause/replay/mute, & speed controls.",
+    "voice_input_hud": "Wispr Flow compatible dictation bar with live audio visualizer, mic pulse indicator, fallback typing input, & voice command shortcuts ('SELECT POKEMON', 'ALLOCATE CHAKRA', 'LAUNCH CAMPAIGN').",
+    "persistent_nav": "Header with '4/4 WORLDS UNLOCKED' progress counter, fast-travel level links, reset quest option, & downloadable resume action.",
+    "quest_completed_modal": "Victory Kamehameha celebration sequence, unlocked full portfolio view, and direct CTA to book interview / connect with Akash."
+  },
+  "level_design_breakdown": {
+    "level_1_swiper_challenge": {
+      "name": "Level 1: The Origin World / Swiper's Challenge",
+      "theme": "Cyber-Jungle (Dora inspired)",
+      "gameplay": "Voice-shouting & fast dictation challenge. Swipe away 'Swiper the Growth Thief' by dictating / typing growth mantras ('Swiper No Swiping', 'Growth Mindset', 'Wispr Flow Speed').",
+      "unlocks_portfolio_section": "Know Me (Akash's Bio, Mission Statement, Early Foundations & Growth DNA)"
+    },
+    "level_2_pokemon_arena": {
+      "name": "Level 2: The Builder's Arena / Prof Oak's Academy",
+      "theme": "Anime Battle Academy (Pokemon Turn-Based Battle)",
+      "gameplay": "Turn-based RPG battle engine. Select 1 of 6 Akash Growth Pokemon (e.g., 'Viral-izard', 'Funnel-dactyl', 'Retention-ite') vs opponent 'Churn-Monster' or 'Stagnant-Bot'. Choose moves ('A/B Blitz', 'Hook Cannon', 'SEO Surge', 'Retention Shield').",
+      "unlocks_portfolio_section": "Explore My Builds (5 Live Projects Showcase with interactive cards, tech stack tags, metrics & demo links)"
+    },
+    "level_3_mind_dungeon": {
+      "name": "Level 3: The Mind Dungeon / Shinobi Strategy Trial",
+      "theme": "Naruto-Inspired Ninja Strategy Mission",
+      "gameplay": "Strategic resource allocation with Chakra Points (100 Chakra Budget). Complete 3 ninja trials: Jutsu 1 (User Acquisition Strategy), Jutsu 2 (Product Positioning), Jutsu 3 (Growth Loop Mechanics).",
+      "unlocks_portfolio_section": "Understand My Mind (Strategic Mental Models, Thinking Flowcharts, First-Principles Framework)"
+    },
+    "level_4_growth_kingdom": {
+      "name": "Level 4: The Growth Kingdom / The 100K Kamehameha",
+      "theme": "DBZ Super Saiyan Growth Marketing Simulator",
+      "gameplay": "Growth marketing simulation. Allocate $100K budget across Paid Ads, Influencer Blitz, Product-Led Loops, and Viral Content. Power up Kamehameha meter to 100K Users & score pitch evaluation.",
+      "unlocks_portfolio_section": "Play Growth Hacker (Interactive Wispr Flow Growth Campaign Proposal & Growth Simulator Sandbox)"
+    }
+  },
+  "sound_effects_and_audio": {
+    "synthesizer": "Use Web Audio API oscillator fallback for retro 8-bit game SFX (win chord, button click, level up chime, damage blast, Kamehameha wave).",
+    "speech_narration": "Web Speech API (window.speechSynthesis) and HTML5 Audio elements with Akash narrator voice lines for intro, level briefing, win state, and advice."
+  },
+  "image_urls": {
+    "cyberpunk_bg": "https://images.unsplash.com/photo-1600998837340-4887228e311f?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzMjV8MHwxfHNlYXJjaHwzfHxjeWJlcnB1bmslMjBhbmltZSUyMG5lb24lMjBzeW50aHdhdmUlMjBiYWNrZ3JvdW5kfGVufDB8fHx8MTc5MzU5NzMzN3ww&ixlib=rb-4.1.0&q=85",
+    "neon_alley": "https://images.unsplash.com/photo-1582478211404-2cb3a166ad5a?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzMjV8MHwxfHNlYXJjaHw0fHxjeWJlcnB1bmslMjBhbmltZSUyMG5lb24lMjBzeW50aHdhdmUlMjBiYWNrZ3JvdW5kfGVufDB8fHx8MTc5MzU5NzMzN3ww&ixlib=rb-4.1.0&q=85",
+    "cyber_portrait": "https://images.pexels.com/photos/13567874/pexels-photo-13567874.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+    "neon_jungle": "https://images.unsplash.com/photo-1693567104031-d6a6b722065f?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxOTB8MHwxfHNlYXJjaHwyfHxuZW9uJTIwanVuZ2xlJTIwbmF0dXJlJTIwZm9yZXN0JTIwZ2xvd2luZ3xlbnwwfHx8fDE3OTM1OTczNDN8MA&ixlib=rb-4.1.0&q=85",
+    "glowing_foliage": "https://images.unsplash.com/photo-1678640579318-ef294a7ec9cf?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxOTB8MHwxfHNlYXJjaHwzfHxuZW9uJTIwanVuZ2xlJTIwbmF0dXJlJTIwZm9yZXN0JTIwZ2xvd2luZ3xlbnwwfHx8fDE3OTM1OTczNDN8MA&ixlib=rb-4.1.0&q=85"
+  },
+  "component_path": "/app/frontend/src/components/",
+  "testing_requirements": {
+    "data_testid_rule": "ALL interactive and key informational elements MUST include kebab-case data-testid attributes.",
+    "key_testids": [
+      "enter-quest-btn",
+      "rpg-world-map",
+      "level-card-1",
+      "level-card-2",
+      "level-card-3",
+      "level-card-4",
+      "audio-player-toggle",
+      "voice-input-field",
+      "voice-input-submit-btn",
+      "pokemon-select-grid",
+      "pokemon-battle-attack-btn",
+      "ninja-chakra-budget-slider",
+      "ninja-submit-trial-btn",
+      "growth-budget-simulator",
+      "kamehameha-power-btn",
+      "portfolio-section-know-me",
+      "portfolio-section-builds",
+      "portfolio-section-mind",
+      "portfolio-section-growth",
+      "reset-quest-btn",
+      "download-resume-btn"
+    ]
+  },
+  "instructions_to_main_agent": [
+    "Build a voice-first, high-interactivity anime RPG website. Ensure it feels like a legitimate game experience rather than a basic template with gaming widgets.",
+    "Ensure all level states (locked/unlocked/completed) synchronize with localStorage so refreshing maintains progress.",
+    "Provide fallback keyboard typing controls alongside SpeechRecognition dictation for instant testing.",
+    "Use framer-motion for smooth turn-based animations, attack particle bursts, level-up cards, and Kamehameha energy beam expansion.",
+    "Ensure strict compliance with data-testid attributes across all interactive components."
+  ]
+}

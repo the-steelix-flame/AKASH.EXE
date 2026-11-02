@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="AKASH.EXE">
+  <title>AKASH.EXE</title>
+  <rect x="2.5" y="2.5" width="59" height="59" rx="15" fill="#090C15" stroke="#39FF14" stroke-width="3"/>
+  <path d="M15 47 L27 15 L39 47" fill="none" stroke="#39FF14" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M20.5 37 H33.5" fill="none" stroke="#39FF14" stroke-width="6" stroke-linecap="round"/>
+  <rect x="43" y="41" width="12" height="7" rx="1.5" fill="#00F0FF"/>
+</svg>

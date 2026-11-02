@@ -1,0 +1,42 @@
+# Render Blueprint. Database: a free MongoDB Atlas cluster; paste its URI as MONGO_URL.
+services:
+  - type: web
+    name: portfolio-backend
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    healthCheckPath: /api/
+    envVars:
+      - key: MONGO_URL
+        sync: false
+      - key: DB_NAME
+        value: gaming_portfolio
+      - key: CORS_ORIGINS
+        sync: false # your frontend URL, e.g. https://portfolio-frontend.onrender.com
+      - key: TRUST_PROXY
+        value: "true" # so rate limiting sees the visitor's IP behind Render's proxy
+      - key: ANALYTICS_RETENTION_DAYS
+        value: "180"
+      - key: ANALYTICS_STORE_FREE_TEXT
+        value: "false"
+      # Private analytics dashboard (/admin). Generate with scripts/admin_setup.py. Never put these in the frontend.
+      - key: ADMIN_USERNAME
+        sync: false
+      - key: ADMIN_PASSWORD_HASH
+        sync: false
+      - key: ADMIN_JWT_SECRET
+        sync: false
+
+  - type: web
+    name: portfolio-frontend
+    runtime: static
+    rootDir: frontend
+    buildCommand: yarn install --frozen-lockfile && yarn build
+    staticPublishPath: build
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: REACT_APP_BACKEND_URL
+        sync: false # https://portfolio-backend.onrender.com
