@@ -1,9 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { FlaskConical, Gem, ScrollText, ShieldAlert } from "lucide-react";
+import { FlaskConical, Gem, Map as MapIcon, ScrollText, Search, ShieldAlert } from "lucide-react";
 import ChoiceDeck from "@/components/ChoiceDeck";
 import CharacterReaction from "@/components/CharacterReaction";
+import { ExplorerAkash, TrailMap } from "@/components/ExplorerCast";
 import Countdown from "@/components/Countdown";
+import LookForIt from "@/components/LookForIt";
+import MazeMap from "@/components/MazeMap";
 import LevelShell from "@/components/LevelShell";
 import VictoryScreen from "@/components/VictoryScreen";
 import VoiceInput from "@/components/VoiceInput";
@@ -18,12 +21,15 @@ import { sfx } from "@/utils/sfx";
 import { isSwiperPhrase, relevanceScore } from "@/utils/text";
 
 const LEVEL = LEVELS[0];
-const WINDOW_MS = 20000; // the strict response window, per round (20 seconds)
+const WINDOW_MS = 20000; // Round 1: the strict response window (20 seconds)
+const FIND_MS = 30000; // Round 2: time to spot the object (30 seconds)
+const MAX_TRIES = 3; // wrong tries allowed in each round
 
+// Round 1 is the Swiper challenge (say the magic words). Round 2 is "Look for it". Round 3 is the map.
 const ROUNDS = [
-  { id: "round1", name: "ROUND 1", object: "The First Experiment", icon: FlaskConical },
-  { id: "round2", name: "ROUND 2", object: "The Biggest Achievement", icon: Gem },
-  { id: "round3", name: "ROUND 3", object: "The Biggest Lesson", icon: ScrollText },
+  { id: "round1", name: "ROUND 1", title: "SWIPER, NO SWIPING!", object: "The First Experiment", icon: FlaskConical },
+  { id: "round2", name: "ROUND 2", title: "LOOK FOR IT", object: "The Biggest Achievement", icon: Gem },
+  { id: "round3", name: "ROUND 3", title: "FOLLOW THE MAP", object: "The Biggest Lesson", icon: ScrollText },
 ];
 
 const LESSON_GROUPS = [
@@ -36,7 +42,8 @@ export default function Level1Swiper({ onComplete, onBack, onHome }) {
   const { play, playSequence } = useAudioActions();
   const { say } = useAgentActions();
   const { keepAudio } = useLevelAudio(["level1_intro", "level1_instructions"]);
-  const [phase, setPhase] = useState("intro"); // intro | ready | playing | stolen | question | won | lost
+  const [phase, setPhase] = useState("intro"); // intro | ready | playing | stolen | find-intro | find | maze-intro | maze | question | won | lost
+  const [seed, setSeed] = useState(() => 1 + Math.floor(Math.random() * 1e9)); // a new layout for Round 2 / 3 on every visit and attempt
   const [round, setRound] = useState(0);
   const [roundKey, setRoundKey] = useState(0);
   const [strikes, setStrikes] = useState(0);
@@ -53,7 +60,7 @@ export default function Level1Swiper({ onComplete, onBack, onHome }) {
   // The intro is taller than a screen, so the visitor may have scrolled down to press START. When a round
   // begins, bring the arena (and its countdown) back into view, clear of the sticky bars.
   useEffect(() => {
-    if (phase !== "ready") return;
+    if (phase !== "ready" && phase !== "find" && phase !== "maze") return;
     document.querySelector("[data-testid=l1-arena]")?.scrollIntoView({ block: "start", behavior: window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
   }, [phase, round]);
 
@@ -88,11 +95,83 @@ export default function Level1Swiper({ onComplete, onBack, onHome }) {
     clearTimers();
     setLostReason(reason);
     setFrozen(true);
-    setPhase("stolen");
-    sfx.buzzer();
-    say("Too slow!", { ms: 2000, mood: "worried" });
     track("swiper_result", { round: round + 1, ok: false, reason, practice: false });
-    later(() => { setPhase("lost"); playSequence(["swiper_celebration", "level1_fail"]); }, 1100);
+    sfx.buzzer();
+    if (round === 0) {
+      setPhase("stolen");
+      say("Too slow!", { ms: 2000, mood: "worried" });
+      later(() => { setPhase("lost"); playSequence(["swiper_celebration", "level1_fail"]); }, 1100);
+    } else {
+      say(reason === "time" ? "Out of time!" : "Not this time.", { ms: 2200, mood: "worried" });
+      later(() => setPhase("lost"), 700);
+    }
+  };
+
+  // ---- Round 2 and Round 3 flow
+  const goFindIntro = () => {
+    clearTimers();
+    setRound(1); setStrikes(0); setFeedback(null); setFrozen(false); setPractice(false);
+    setPhase("find-intro");
+    say("It's hidden somewhere. Can you find it?", { ms: 3200 });
+  };
+  const goMazeIntro = () => {
+    clearTimers();
+    setRound(2); setStrikes(0); setFeedback(null); setFrozen(false);
+    setPhase("maze-intro");
+    say("Now, follow the map!", { ms: 3000 });
+  };
+  const startFind = () => {
+    clearTimers();
+    sfx.transition();
+    setSeed((x) => x + 1); setRoundKey((k) => k + 1); setStrikes(0); setFeedback(null); setFrozen(false);
+    roundStart.current = Date.now();
+    setPhase("find");
+  };
+  const startMaze = () => {
+    clearTimers();
+    sfx.transition();
+    setSeed((x) => x + 1); setStrikes(0); setFeedback(null); setFrozen(false);
+    roundStart.current = Date.now();
+    setPhase("maze");
+  };
+
+  const onFound = () => {
+    if (phase !== "find") return;
+    clearTimers();
+    setFrozen(true);
+    sfx.correct();
+    track("swiper_result", { round: 2, ok: true, ms: Date.now() - roundStart.current, source: "tap", practice: false });
+    setFeedback({ ok: true, msg: "FOUND IT! The golden trophy, hiding in the jungle." });
+    say("Nice eyes!", { ms: 1800 });
+    later(goMazeIntro, 1400);
+  };
+  const onMiss = () => {
+    if (phase !== "find") return;
+    sfx.wrong();
+    const s = strikes + 1;
+    setStrikes(s);
+    setFeedback({ ok: false, msg: "Not that one. Check the colour and the shape." });
+    track("swiper_result", { round: 2, ok: false, reason: "wrong-item", practice: false });
+    if (s >= MAX_TRIES) { setFrozen(true); lose("strikes"); }
+  };
+
+  const onMazeResult = ({ ok, treasure }) => {
+    if (phase !== "maze") return;
+    if (ok) {
+      sfx.correct();
+      track("swiper_result", { round: 3, ok: true, ms: Date.now() - roundStart.current, source: "map-trail", practice: false });
+      setFeedback({ ok: true, msg: `CHRONOS! ${treasure.tagline}. The project my biggest lesson came from.` });
+      say("You found it!", { ms: 1800 });
+      later(() => { setFeedback(null); setPhase("question"); say("Last one. A riddle!", { ms: 3200 }); }, 1500);
+      return;
+    }
+    sfx.wrong();
+    const s = strikes + 1;
+    setStrikes(s);
+    setFeedback({ ok: false, msg: `That trail led to ${treasure.label} (${treasure.tagline}), not CHRONOS.` });
+    track("swiper_result", { round: 3, ok: false, reason: "wrong-trail", practice: false });
+    if (s >= MAX_TRIES) later(() => lose("strikes"), 1300);
+    else later(() => { setSeed((x) => x + 1); setFeedback(null); }, 1900); // a fresh map
   };
 
   const onExpire = () => { if (phase === "playing" && !practice) lose("time"); };
@@ -109,13 +188,8 @@ export default function Level1Swiper({ onComplete, onBack, onHome }) {
       track("swiper_result", { round: round + 1, ok: true, ms: Date.now() - roundStart.current, source: meta?.source || "text", practice });
       setFeedback({ ok: true, msg: practice ? `That's it. (Read from ${via}.) Start the real run when you're ready.` : `SWIPER REPELLED! (Read from ${via}.)` });
       if (practice) { setPhase("intro"); setPractice(false); return; }
-      const next = round + 1;
-      const advance = () => {
-        if (round < 2) beginRound(next);
-        else { setFeedback(null); setPhase("question"); say("Last one. Swiper has a riddle.", { ms: 3200 }); }
-      };
       setFrozen(true);
-      play("swiper_repelled", { onEnded: () => later(advance, 250) });
+      play("swiper_repelled", { onEnded: () => later(goFindIntro, 250) });
     } else {
       sfx.wrong();
       play("magic_words_hint");
@@ -123,7 +197,7 @@ export default function Level1Swiper({ onComplete, onBack, onHome }) {
       setStrikes(s);
       setFeedback({ ok: false, msg: 'Not it. Say exactly: "Swiper, no swiping!"' });
       track("swiper_result", { round: round + 1, ok: false, reason: "wrong-words", practice });
-      if (s >= 3 && !practice) lose("strikes");
+      if (s >= MAX_TRIES && !practice) lose("strikes");
       else setFrozen(false); // the clock keeps running
     }
   };
@@ -167,9 +241,12 @@ export default function Level1Swiper({ onComplete, onBack, onHome }) {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="hud-panel mx-auto max-w-xl rounded-xl p-8 text-center" data-testid="l1-intro-panel">
           <div className="flex justify-center"><CharacterReaction kind="swiper" mood="mischievous" size={170} testId="swiper-fox" /></div>
           <p className="mt-2 font-display text-2xl font-black text-neon text-glow-lime">"SWIPER, NO SWIPING!"</p>
-          <p className="mt-3 text-sm text-slate-300">
-            Three rounds. Swiper lunges, and you have <b className="text-white">{WINDOW_MS / 1000} seconds</b> to say it.
-          </p>
+          <p className="mt-3 text-sm text-slate-300">Three rounds, three different games.</p>
+          <ol className="mx-auto mt-3 max-w-md space-y-2 text-left text-xs text-slate-300" data-testid="l1-round-list">
+            <li className="flex items-start gap-3 rounded-lg border border-neon/30 bg-neon/5 p-2.5"><ShieldAlert className="mt-0.5 h-4 w-4 shrink-0 text-neon" /><span><b className="text-white">Round 1: Swiper, no swiping!</b> He lunges. You have <b className="text-white">{WINDOW_MS / 1000} seconds</b> to say the magic words.</span></li>
+            <li className="flex items-start gap-3 rounded-lg border border-volt/30 bg-volt/5 p-2.5"><Search className="mt-0.5 h-4 w-4 shrink-0 text-volt" /><span><b className="text-white">Round 2: Look for it.</b> Find the golden trophy hiding in a jungle of the things I build with.</span></li>
+            <li className="flex items-start gap-3 rounded-lg border border-amber-300/30 bg-amber-300/5 p-2.5"><MapIcon className="mt-0.5 h-4 w-4 shrink-0 text-amber-300" /><span><b className="text-white">Round 3: Follow the map.</b> Five trails lead to five of my projects. Which one reaches Chronos?</span></li>
+          </ol>
           <p className="mx-auto mt-3 max-w-md text-[11px] leading-relaxed text-slate-500" data-testid="l1-input-honesty">
             The game reads the text in the box, typed or dictated with Wispr Flow. It never listens to your microphone. The optional browser mic button is separate.
           </p>
@@ -179,19 +256,85 @@ export default function Level1Swiper({ onComplete, onBack, onHome }) {
               START ROUND 1
             </button>
             <button data-testid="l1-practice-btn" onClick={() => startRun(true)} className="rounded-md border border-slate-600 px-6 py-3 font-display text-xs font-bold tracking-[0.2em] text-slate-300 hover:border-neon hover:text-neon focus:outline-none focus:ring-2 focus:ring-neon">
-              PRACTICE, NO TIMER
+              PRACTICE ROUND 1, NO TIMER
             </button>
           </div>
         </motion.div>
       )}
 
-      {(phase === "ready" || phase === "playing" || phase === "stolen" || phase === "question") && (
+      {(phase === "ready" || phase === "playing" || phase === "stolen" || phase === "find-intro" || phase === "find" || phase === "maze-intro" || phase === "maze" || phase === "question") && (
         <div className="mx-auto max-w-2xl">
+          {!practice && (
+            <ol className="mb-3 flex items-center justify-center gap-1.5 text-[9px] font-black tracking-widest sm:gap-3" data-testid="l1-journey" aria-label="Your journey">
+              {["SWIPER GATE", "TECH JUNGLE", "TRAIL MAP"].map((name, i) => {
+                const done = phase === "question" || i < round;
+                const here = phase !== "question" && i === round;
+                return (
+                  <li key={name} className="flex items-center gap-1.5 sm:gap-3" aria-current={here ? "step" : undefined}>
+                    <span className={`flex items-center gap-1 rounded-full border-2 px-2 py-0.5 ${done ? "border-neon bg-neon/15 text-neon" : here ? "border-amber-300 bg-amber-300 text-slate-900" : "border-slate-700 text-slate-500"}`}>
+                      <span>{done ? "✓" : i + 1}</span><span className="hidden min-[420px]:inline">{name}</span>
+                    </span>
+                    {i < 2 && <span aria-hidden="true" className="text-slate-600">···</span>}
+                  </li>
+                );
+              })}
+            </ol>
+          )}
           <div className="mb-4 flex items-center justify-between text-[10px] tracking-[0.25em] text-slate-500">
-            <span data-testid="l1-round-indicator">{practice ? "PRACTICE" : `ROUND ${Math.min(round + 1, 3)}/3`}</span>
-            {!practice && <span data-testid="l1-strikes">WRONG TRIES: <span className={strikes > 0 ? "text-blood" : "text-neon"}>{strikes}/3</span></span>}
+            <span data-testid="l1-round-indicator">{practice ? "PRACTICE" : phase === "question" ? "FINAL RIDDLE" : `ROUND ${Math.min(round + 1, 3)}/3`}</span>
+            {!practice && phase !== "question" && <span data-testid="l1-strikes">WRONG TRIES: <span className={strikes > 0 ? "text-blood" : "text-neon"}>{strikes}/{MAX_TRIES}</span></span>}
           </div>
 
+          {phase === "find-intro" && (
+            <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} className="rounded-3xl border-[5px] border-amber-300 bg-gradient-to-b from-sky-300 to-emerald-300 p-5 text-center text-slate-900 shadow-[0_8px_0_#b45309]" data-testid="l1-find-intro">
+              <div className="flex justify-center"><ExplorerAkash size={120} testId="explorer-intro" /></div>
+              <p className="mt-2 text-[10px] font-black tracking-[0.3em] text-sky-900">ROUND 2 // LOOK FOR IT</p>
+              <p className="mt-2 text-sm font-bold">Round 1 done! Now <b>the Biggest Achievement</b> is hidden somewhere in the tech jungle: a golden trophy among all the things I build with.</p>
+              <p className="mt-2 text-[11px] text-slate-700">{FIND_MS / 1000} seconds. {MAX_TRIES} wrong taps and it's over. Look at the colour and the shape.</p>
+              <button data-testid="l1-find-go" onClick={startFind} className="mt-5 rounded-full border-4 border-slate-800 bg-amber-300 px-8 py-3 font-display text-xs font-black tracking-[0.25em] text-slate-900 shadow-[0_5px_0_#1e293b] transition-transform hover:-translate-y-0.5 focus:outline-none focus:ring-4 focus:ring-sky-600 active:translate-y-1 active:shadow-none">
+                START ROUND 2
+              </button>
+            </motion.div>
+          )}
+
+          {phase === "find" && (
+            <div className="rounded-3xl border-[5px] border-amber-300 bg-gradient-to-b from-sky-300 to-emerald-300 p-3 shadow-[0_8px_0_#b45309] sm:p-4" data-testid="l1-arena">
+              <LookForIt
+                key={seed}
+                seed={seed}
+                disabled={frozen}
+                onFound={onFound}
+                onMiss={onMiss}
+                testId="l1-find"
+                aside={
+                  <div className="flex shrink-0 flex-col items-center gap-0.5">
+                    <Countdown key={roundKey} ms={FIND_MS} running={phase === "find" && !frozen} onExpire={() => { if (phase === "find") lose("time"); }} testId="l1-countdown" size={64} />
+                    <span className="text-[9px] font-black tracking-[0.25em] text-sky-800" data-testid="l1-timer-label">FIND IT!</span>
+                  </div>
+                }
+              />
+            </div>
+          )}
+
+          {phase === "maze-intro" && (
+            <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} className="rounded-3xl border-[5px] border-amber-300 bg-gradient-to-b from-sky-300 to-emerald-300 p-5 text-center text-slate-900 shadow-[0_8px_0_#b45309]" data-testid="l1-maze-intro">
+              <div className="flex items-end justify-center gap-4"><ExplorerAkash size={100} testId="explorer-maze-intro" /><TrailMap size={90} testId="trail-map-intro" /></div>
+              <p className="mt-2 text-[10px] font-black tracking-[0.3em] text-sky-900">ROUND 3 // FOLLOW THE MAP</p>
+              <p className="mt-2 text-sm font-bold">Last stop: <b>CHRONOS</b>, the project my biggest lesson came from. Five trails lead to five of my projects, and they cross. Only one reaches Chronos.</p>
+              <p className="mt-2 text-[11px] text-slate-700">No timer. Follow the trails with your eyes, then pick the number where yours starts. {MAX_TRIES} wrong trails and it's over.</p>
+              <button data-testid="l1-maze-go" onClick={startMaze} className="mt-5 rounded-full border-4 border-slate-800 bg-amber-300 px-8 py-3 font-display text-xs font-black tracking-[0.25em] text-slate-900 shadow-[0_5px_0_#1e293b] transition-transform hover:-translate-y-0.5 focus:outline-none focus:ring-4 focus:ring-sky-600 active:translate-y-1 active:shadow-none">
+                START ROUND 3
+              </button>
+            </motion.div>
+          )}
+
+          {phase === "maze" && (
+            <div className="rounded-3xl border-[5px] border-amber-300 bg-gradient-to-b from-sky-300 to-emerald-300 p-3 shadow-[0_8px_0_#b45309] sm:p-4" data-testid="l1-arena">
+              <MazeMap key={seed} seed={seed} disabled={frozen} onResult={onMazeResult} testId="l1-maze" />
+            </div>
+          )}
+
+          {(phase === "ready" || phase === "playing" || phase === "stolen") && (
           <div className={`hud-panel rounded-xl p-5 sm:p-6 ${phase === "playing" ? "border-blood/50" : ""}`} data-testid="l1-arena">
             <div className="flex items-start justify-between gap-3">
               <div className="text-[10px] font-bold tracking-[0.3em] text-volt">{practice ? "PRACTICE" : R.name} // {R.object.toUpperCase()}</div>
@@ -236,6 +379,7 @@ export default function Level1Swiper({ onComplete, onBack, onHome }) {
               </div>
             )}
           </div>
+          )}
 
           {feedback && (
             <div className={`mt-4 rounded-lg border p-3 text-center text-xs ${feedback.ok ? "border-neon/50 bg-neon/10 text-neon" : "border-blood/50 bg-blood/10 text-blood"}`} data-testid="l1-feedback">
@@ -243,7 +387,7 @@ export default function Level1Swiper({ onComplete, onBack, onHome }) {
             </div>
           )}
 
-          {phase !== "question" && (
+          {(phase === "ready" || phase === "playing" || phase === "stolen") && (
             <div className="mt-5">
               <VoiceInput
                 testId="l1-command"
@@ -264,7 +408,7 @@ export default function Level1Swiper({ onComplete, onBack, onHome }) {
           {phase === "question" && (
             <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} className="mt-5 space-y-4" data-testid="l1-final-question">
               <div className="hud-panel-cyan rounded-lg p-4">
-                <div className="text-[10px] font-bold tracking-[0.3em] text-volt">SWIPER'S RIDDLE</div>
+                <div className="text-[10px] font-bold tracking-[0.3em] text-volt">THE FINAL RIDDLE</div>
                 <p className="mt-2 text-sm text-slate-100">{L1_RIDDLE.question}</p>
               </div>
               <ChoiceDeck testId="l1-deck" accent="volt" options={L1_RIDDLE.options} value={pick} onChange={(o) => { setFeedback(null); setPick(o ? o.id : null); }} label="Riddle answers" />
@@ -310,10 +454,19 @@ export default function Level1Swiper({ onComplete, onBack, onHome }) {
         <VictoryScreen
           type="defeat"
           title={lostReason === "time" ? "TOO SLOW" : "SWIPER ESCAPED"}
-          message={lostReason === "time" ? `You had ${WINDOW_MS / 1000} seconds. Swiper took it.` : "Three wrong tries. Swiper took it."}
-          character={<CharacterReaction kind="swiper" mood="celebrating" size={130} />}
+          message={
+            round === 0 ? (lostReason === "time" ? `You had ${WINDOW_MS / 1000} seconds. Swiper took it.` : "Three wrong tries. Swiper took it.")
+            : round === 1 ? (lostReason === "time" ? `The ${FIND_MS / 1000} seconds ran out. The trophy stays hidden this time.` : "Three wrong taps. The trophy stays hidden this time.")
+            : "Three wrong trails. Chronos is still out there."
+          }
+          character={round === 0 ? <CharacterReaction kind="swiper" mood="celebrating" size={130} /> : <ExplorerAkash size={110} wave={false} testId="explorer-defeat" />}
           retryLabel={`TRY ROUND ${round + 1} AGAIN`}
-          onRetry={() => { setStrikes(0); beginRound(round); }}
+          onRetry={() => {
+            setStrikes(0);
+            if (round === 0) beginRound(0);
+            else if (round === 1) { setFeedback(null); setFrozen(false); setPhase("find-intro"); }
+            else { setFeedback(null); setFrozen(false); setPhase("maze-intro"); }
+          }}
           onReturn={() => onBack()}
         />
       )}

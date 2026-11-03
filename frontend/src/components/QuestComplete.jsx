@@ -44,7 +44,7 @@ export default function QuestComplete({ onEnter, onReturn }) {
           className="mt-4 text-sm tracking-[0.3em] text-slate-300 sm:text-base"
           data-testid="quest-complete-subtitle"
         >
-          ALL FOUR WORLDS CLEARED.
+          ALL FOUR SPACES CLEARED.
         </motion.p>
 
         {revealed && (
@@ -78,7 +78,7 @@ export default function QuestComplete({ onEnter, onReturn }) {
           onClick={onReturn}
           className="mx-auto mt-10 flex items-center gap-2 rounded-md border-2 border-volt px-6 py-3 font-display text-xs font-bold tracking-[0.2em] text-volt transition-colors hover:bg-volt/10 focus:outline-none focus:ring-2 focus:ring-volt"
         >
-          <Map className="h-4 w-4" /> RETURN TO WORLD MAP
+          <Map className="h-4 w-4" /> RETURN TO SPACE MAP
         </button>
       </div>
     </div>

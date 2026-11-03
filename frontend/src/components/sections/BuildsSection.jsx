@@ -2,6 +2,7 @@ import { memo, useState } from "react";
 import { ExternalLink, Github, Play } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { OTHER_PROJECTS, PROJECTS, PROJECT_GROUPS } from "@/data/projects";
+import Journey from "@/components/journey/Journey";
 import { track } from "@/utils/analytics";
 
 const TEXT = { neon: "text-neon", volt: "text-volt", aura: "text-aura", ember: "text-ember", blood: "text-blood" };
@@ -85,17 +86,55 @@ function ProjectDialog({ project, onClose }) {
   );
 }
 
+const FLAGSHIP_STYLE = {
+  chronos: { monument: "orderbook", accent: "volt" },
+  kalakriti: { monument: "vase", accent: "ember" },
+  dealflow: { monument: "ledger", accent: "neon" },
+  reflow: { monument: "knot", accent: "aura" },
+};
+
 export default function BuildsSection() {
   const [open, setOpen] = useState(null);
   const openProject = (p) => { setOpen(p); track("project_open", { project: p.id }); };
 
+  const chapters = [
+    ...PROJECTS.filter((p) => p.group === "flagship").map((p) => ({
+      id: p.id, testId: `journey-project-${p.id}`, ...FLAGSHIP_STYLE[p.id], tag: "FLAGSHIP", title: p.name, sub: `${p.tagline} · ${p.when}`,
+      children: (
+        <>
+          <p className="text-slate-200">{p.summary}</p>
+          <ul className="mt-3 space-y-1.5">{p.bullets.slice(0, 3).map((b) => <li key={b} className="flex gap-2"><span className={TEXT[p.accent]}>▸</span><span>{b}</span></li>)}</ul>
+          <div className="mt-3 flex flex-wrap gap-1.5">{p.stack.map((t) => <span key={t} className="rounded border border-slate-700 bg-slate-900 px-2 py-0.5 text-[10px] text-slate-300">{t}</span>)}</div>
+          <button type="button" onClick={() => openProject(p)} data-testid={`journey-open-${p.id}`} className="mt-4 flex items-center gap-1.5 rounded border border-neon/60 bg-neon/10 px-3 py-2 text-[11px] font-bold tracking-widest text-neon hover:bg-neon/20 focus:outline-none focus:ring-2 focus:ring-neon">
+            <Play className="h-3.5 w-3.5" /> WATCH THE DEMO
+          </button>
+        </>
+      ),
+    })),
+    {
+      id: "archive", testId: "journey-archive", monument: "archive", accent: "volt", tag: "THE ARCHIVE", title: `All ${PROJECTS.length} builds`, sub: "Platforms, AI and vision, and smaller builds",
+      children: (
+        <>
+          <p>Four flagships and ten more: full-stack platforms, RAG and computer vision, plus a few smaller tools. Every one has a demo video and a link to the code.</p>
+          <button type="button" onClick={() => document.getElementById("builds-archive")?.scrollIntoView({ behavior: "smooth", block: "start" })} data-testid="journey-to-archive" className="mt-4 rounded border border-volt/60 bg-volt/10 px-3 py-2 text-[11px] font-bold tracking-widest text-volt hover:bg-volt/20 focus:outline-none focus:ring-2 focus:ring-volt">
+            OPEN THE ARCHIVE
+          </button>
+        </>
+      ),
+    },
+  ];
+
   return (
-    <section className="relative px-4 py-16 sm:px-8" data-testid="portfolio-section-builds">
-      <div className="mx-auto max-w-5xl">
-        <h2 className="font-display mb-2 text-center text-3xl font-black text-white sm:text-4xl">
-          MY <span className="text-volt text-glow-cyan">BUILDS</span>
-        </h2>
-        <p className="mb-10 text-center text-xs text-slate-400">{PROJECTS.length} projects. Tap one to watch the demo.</p>
+    <section className="relative" data-testid="portfolio-section-builds">
+      <div className="px-4 pb-8 pt-16 text-center sm:px-8">
+        <h2 className="font-display text-3xl font-black text-white sm:text-4xl">MY <span className="text-volt text-glow-cyan">BUILDS</span></h2>
+        <p className="mt-3 text-xs text-slate-400">{PROJECTS.length} projects. Four flagships to fly through, then the full archive.</p>
+      </div>
+      <Journey chapters={chapters} title="THE FLAGSHIPS" kicker="FOUR BIG BUILDS, ONE ARCHIVE" testId="journey-builds" />
+
+      <div id="builds-archive" className="mx-auto max-w-5xl px-4 pb-16 pt-12 sm:px-8">
+        <h3 className="font-display mb-1 text-center text-xl font-black text-white">THE FULL ARCHIVE</h3>
+        <p className="mb-10 text-center text-xs text-slate-400">Tap any project to watch its demo.</p>
 
         {PROJECT_GROUPS.map((g) => (
           <div key={g.id} className="mb-10" data-testid={`group-${g.id}`}>

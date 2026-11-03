@@ -19,11 +19,33 @@ export const HERO = {
 export const KNOW_ME_FACTS = [
   "B.Tech CSE, Heritage Institute of Technology, Kolkata (2027)",
   "CGPA 8.50 / 10",
+  "WBJEE: All India Rank 1691 of 150,000",
   "AI Engineer intern, IntelGrader",
   "LeetCode contest rating 1800+",
 ];
 
+// Schools. Add yours here and they appear on the Know Me page by themselves, before the entrance exam and college.
+// Each entry: { name, place, years, board, result }  (all strings; leave out what you don't want to show).
+// Nothing is invented: until real entries are added, no school cards are shown.
+export const SCHOOLS = [];
+
+const schoolCards = SCHOOLS.map((s, i) => ({
+  id: `school-${i + 1}`,
+  tag: "SCHOOL",
+  title: s.name,
+  sub: [s.place, s.years, s.board].filter(Boolean).join(" · "),
+  body: s.result,
+}));
+
 export const TIMELINE = [
+  ...schoolCards,
+  {
+    id: "jee",
+    tag: "ENTRANCE EXAM",
+    title: "West Bengal JEE (WBJEE)",
+    sub: "State engineering entrance examination",
+    body: "All India Rank 1691 out of 150,000 candidates.",
+  },
   {
     id: "education",
     tag: "EDUCATION",

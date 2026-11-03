@@ -16,7 +16,7 @@ export default function HomeView({ completedCount, onNavigate }) {
           <span className="text-neon text-glow-lime">AKASH.EXE</span> <span className="text-white">// THE GROWTH QUEST</span>
         </motion.h1>
         <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} className="relative mt-4 text-xs tracking-[0.25em] text-slate-400 sm:text-sm">
-          {done ? "ALL FOUR WORLDS CLEARED" : `${completedCount}/4 WORLDS CLEARED`}
+          {done ? "ALL FOUR SPACES CLEARED" : `${completedCount}/4 SPACES CLEARED`}
         </motion.p>
         {done && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }} className="relative mt-6 flex flex-wrap justify-center gap-2">

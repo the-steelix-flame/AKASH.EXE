@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { BookOpen, Map, PartyPopper, Play, RotateCcw, Save, Skull } from "lucide-react";
 
 // In-page result panel (no longer a fixed full-screen overlay, so it can never trap or hide the
-// navigation). Always offers a way back to the world map; nothing auto-advances.
+// navigation). Always offers a way back to the space map; nothing auto-advances.
 export default function VictoryScreen({
   type = "victory", // victory | defeat
   title,
@@ -15,8 +15,8 @@ export default function VictoryScreen({
   continueLabel = "CONTINUE",
   onRetry,
   retryLabel = "RETRY MISSION",
-  onReturn,         // back to the world map
-  returnLabel = "RETURN TO WORLD MAP",
+  onReturn,         // back to the space map
+  returnLabel = "RETURN TO SPACE MAP",
 }) {
   const isWin = type === "victory";
   return (

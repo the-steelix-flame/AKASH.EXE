@@ -5,31 +5,31 @@
     "group": "root",
     "label": "OPENING TRANSMISSION",
     "purpose": "Main introduction (plays when the visitor presses START QUEST)",
-    "text": "Hey, welcome to my world. I'm Akash. Instead of handing you a resume, I thought I'd let you explore my story yourself. There are four worlds here. Each one reveals a different part of me. Your voice is your controller. Speak naturally, and let your voice do the typing. Ready? Let's begin the Growth Quest."
+    "text": "Hey, welcome to my space. I'm Akash. Instead of handing you a resume, I thought I'd let you explore my story yourself. There are four spaces here. Each one reveals a different part of me. Your voice is your controller. Speak naturally, and let your voice do the typing. Ready? Let's begin the Growth Quest."
   },
   {
     "id": "quest_complete",
     "file": "final_message",
     "group": "root",
     "label": "FINAL TRANSMISSION",
-    "purpose": "Final message after all four worlds are cleared",
-    "text": "You did it. All four worlds. All four versions of me. The experimenter, the builder, the strategist, and the growth hacker. But here's the secret: the real game starts now. India has millions of voices. Let's help them do more with theirs. Let's build something India talks about."
+    "purpose": "Final message after all four spaces are cleared",
+    "text": "You did it. All four spaces. All four versions of me. The experimenter, the builder, the strategist, and the growth hacker. But here's the secret: the real game starts now. India has millions of voices. Let's help them do more with theirs. Let's build something India talks about."
   },
   {
     "id": "level1_intro",
     "file": "level1/intro",
     "group": "level1",
-    "label": "LEVEL 1 // ORIGIN WORLD",
+    "label": "LEVEL 1 // ORIGIN SPACE",
     "purpose": "Level 1 narration when the level opens",
-    "text": "Welcome to the Origin World. Swiper is after three pieces of my story. Your job is simple: stop him with the magic words."
+    "text": "Welcome to the Origin Space. Swiper is after three pieces of my story. Stop him, find what he hid, and follow the map to get them back."
   },
   {
     "id": "level1_instructions",
     "file": "level1/instructions",
     "group": "level1",
     "label": "LEVEL 1 // BRIEFING",
-    "purpose": "Level 1 rules, plays after the intro and on REPLAY BRIEFING",
-    "text": "When Swiper lunges, you get twenty seconds. Say it before the timer hits zero: Swiper, no swiping! Three rounds. Protect all three memories."
+    "purpose": "Level 1 rules for all three rounds, plays after the intro and on REPLAY BRIEFING",
+    "text": "Three rounds. Round one: when Swiper lunges, you get twenty seconds. Say it before the timer hits zero: Swiper, no swiping! Round two: look for it. Find the golden trophy hiding in the jungle. Round three: follow the map. Trace the right trail to Chronos."
   },
   {
     "id": "level1_win",

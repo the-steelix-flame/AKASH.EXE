@@ -51,7 +51,7 @@ export default function LandingPage({ onEnter, playIntro, returning = false }) {
     sfx.powerup();
     setStarted(true);
     playIntro();
-    // Scroll (not a page swap): the hero and the world map are one continuous page.
+    // Scroll (not a page swap): the hero and the space map are one continuous page.
     setTimeout(() => { onEnter(); setTimeout(() => setStarted(false), 1200); }, 700);
   };
 
@@ -126,7 +126,7 @@ export default function LandingPage({ onEnter, playIntro, returning = false }) {
             disabled={started}
             className="pulse-ring group relative flex items-center gap-3 rounded-md border-2 border-neon bg-neon/10 px-8 py-4 font-display text-sm font-bold tracking-[0.3em] text-neon transition-all hover:bg-neon hover:text-void hover:shadow-[0_0_40px_rgba(57,255,20,0.5)] focus:outline-none focus:ring-2 focus:ring-neon disabled:opacity-60 sm:px-12 sm:text-base"
           >
-            {started ? "TRAVELLING TO THE WORLD MAP…" : returning ? "CONTINUE QUEST" : "START QUEST"}
+            {started ? "TRAVELLING TO THE SPACE MAP…" : returning ? "CONTINUE QUEST" : "START QUEST"}
             <ChevronRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
           </button>
           <div className="mt-4 flex items-center justify-center gap-2 text-[10px] tracking-wider text-slate-500" data-testid="voice-narration-note" data-agent-avoid>
@@ -139,11 +139,11 @@ export default function LandingPage({ onEnter, playIntro, returning = false }) {
       <button
         type="button"
         onClick={onEnter}
-        aria-label="Scroll down to the world map"
+        aria-label="Scroll down to the space map"
         data-testid="scroll-cue"
         className="absolute bottom-12 left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-0.5 text-[10px] tracking-[0.35em] text-slate-500 transition-colors hover:text-neon focus:outline-none focus:ring-2 focus:ring-neon"
       >
-        SCROLL TO THE WORLD MAP
+        SCROLL TO THE SPACE MAP
         <ChevronDown className="wm-anim scroll-bob h-4 w-4 text-neon" />
       </button>
 

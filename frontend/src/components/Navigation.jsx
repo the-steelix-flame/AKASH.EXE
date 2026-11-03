@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Home, Map, Menu, ShieldCheck, Volume2, VolumeX, X } from "lucide-react";
+import { Home, Map, Menu, Music, ShieldCheck, Volume2, VolumeX, X } from "lucide-react";
 import ResetQuest from "@/components/ResetQuest";
 import { useAudioActions, useAudioState } from "@/hooks/useAudio";
+import { useMusic } from "@/hooks/useMusic";
 
 // Sections appear in the nav the moment their level is cleared, so a finished level's
 // portfolio content can always be revisited without replaying the game.
@@ -17,8 +18,18 @@ function MuteButton() {
   const { muted } = useAudioState();
   const { toggleMute } = useAudioActions();
   return (
-    <button data-testid="nav-mute-btn" onClick={toggleMute} aria-pressed={muted} aria-label={muted ? "Unmute narration" : "Mute narration"} className="rounded border border-slate-700 p-2 text-slate-300 hover:border-neon hover:text-neon focus:outline-none focus:ring-2 focus:ring-neon">
+    <button data-testid="nav-mute-btn" onClick={toggleMute} aria-pressed={muted} aria-label={muted ? "Unmute narration" : "Mute narration"} className="rounded border border-slate-700 p-1.5 text-slate-300 hover:border-neon hover:text-neon focus:outline-none focus:ring-2 focus:ring-neon sm:p-2">
       {muted ? <VolumeX className="h-4 w-4 text-blood" /> : <Volume2 className="h-4 w-4" />}
+    </button>
+  );
+}
+
+function MusicButton() {
+  const { on, running, toggle } = useMusic();
+  return (
+    <button data-testid="nav-music-btn" data-playing={running ? "true" : "false"} onClick={toggle} aria-pressed={on} aria-label={on ? "Turn background music off" : "Turn background music on"} title={on ? "Music on" : "Music off"} className={`relative rounded border border-slate-700 p-1.5 sm:p-2 hover:border-neon hover:text-neon focus:outline-none focus:ring-2 focus:ring-neon ${on ? "text-neon" : "text-slate-500"}`}>
+      <Music className="h-4 w-4" />
+      {!on && <span aria-hidden="true" className="absolute left-1.5 right-1.5 top-1/2 h-0.5 -rotate-45 rounded bg-blood" />}
     </button>
   );
 }
@@ -29,19 +40,19 @@ export default function Navigation({ allCompleted, completedCount, isCompleted, 
 
   const items = [
     { key: "home", label: "HOME", icon: Home },
-    { key: "worldmap", label: "WORLD MAP", icon: Map },
+    { key: "worldmap", label: "SPACE MAP", icon: Map },
     ...SECTION_ITEMS.filter((s) => isCompleted(s.level)),
   ];
 
   return (
     <header className="fixed left-0 right-0 top-0 z-40 border-b border-slate-800 bg-void" data-testid="main-nav">
-      <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6">
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-2 px-3 py-3 sm:gap-3 sm:px-6">
         <button
           data-testid="nav-home-btn"
           onClick={() => go("home")}
           className="flex items-center gap-2 font-display text-sm font-black tracking-wider text-neon focus:outline-none focus:ring-2 focus:ring-neon"
         >
-          <Home className="h-4 w-4" />
+          <Home className="hidden h-4 w-4 min-[400px]:block" />
           AKASH.EXE
         </button>
 
@@ -60,7 +71,7 @@ export default function Navigation({ allCompleted, completedCount, isCompleted, 
           ))}
         </nav>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-1.5 sm:gap-3">
           <span
             className={`hidden border px-2.5 py-1 text-[10px] font-bold tracking-[0.2em] sm:inline-block ${
               allCompleted ? "border-neon/50 bg-neon/10 text-neon" : "border-slate-700 text-slate-400"
@@ -70,12 +81,13 @@ export default function Navigation({ allCompleted, completedCount, isCompleted, 
             {completedCount}/4 CLEARED
           </span>
           <MuteButton />
-          <button data-testid="nav-privacy-btn" onClick={onPrivacy} aria-label="Privacy and analytics" className="rounded border border-slate-700 p-2 text-slate-300 hover:border-volt hover:text-volt focus:outline-none focus:ring-2 focus:ring-volt"><ShieldCheck className="h-4 w-4" /></button>
+          <MusicButton />
+          <button data-testid="nav-privacy-btn" onClick={onPrivacy} aria-label="Privacy and analytics" className="rounded border border-slate-700 p-1.5 text-slate-300 sm:p-2 hover:border-volt hover:text-volt focus:outline-none focus:ring-2 focus:ring-volt"><ShieldCheck className="h-4 w-4" /></button>
           <ResetQuest onReset={onReset} />
           <button
             data-testid="nav-menu-btn"
             onClick={() => setOpen((o) => !o)}
-            className="rounded border border-slate-700 p-2 text-slate-300 md:hidden"
+            className="rounded border border-slate-700 p-1.5 text-slate-300 sm:p-2 md:hidden"
             aria-label="Toggle navigation menu"
             aria-expanded={open}
           >

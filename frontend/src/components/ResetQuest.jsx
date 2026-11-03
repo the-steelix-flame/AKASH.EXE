@@ -10,9 +10,9 @@ export default function ResetQuest({ onReset }) {
       <button
         data-testid="reset-quest-btn"
         onClick={() => setConfirming(true)}
-        className="rounded-md border border-slate-700 px-3 py-1.5 text-[10px] tracking-widest text-slate-500 transition-colors hover:border-blood hover:text-blood focus:outline-none focus:ring-2 focus:ring-blood"
+        className="whitespace-nowrap rounded-md border border-slate-700 px-2 py-1.5 text-[9px] tracking-widest text-slate-500 sm:px-3 sm:text-[10px] transition-colors hover:border-blood hover:text-blood focus:outline-none focus:ring-2 focus:ring-blood"
       >
-        RESET QUEST
+        <span className="sm:hidden">RESET</span><span className="hidden sm:inline">RESET QUEST</span>
       </button>
     );
   }

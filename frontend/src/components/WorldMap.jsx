@@ -20,7 +20,7 @@ function Marker({ level, state, open, onToggle }) {
       type="button"
       onClick={() => onToggle(level.n)}
       aria-expanded={open}
-      aria-label={`Level ${level.n}: ${level.world}, ${state}`}
+      aria-label={`Level ${level.n}: ${level.space}, ${state}`}
       data-testid={`level-marker-${level.n}`}
       data-state={state}
       className="group absolute z-10 -translate-x-1/2 -translate-y-1/2 focus:outline-none"
@@ -97,7 +97,7 @@ function InfoPanel({ level, state, onPlay, onRevisit, onClose, inline = false })
       exit={{ opacity: 0 }}
       transition={{ duration: 0.16 }}
       role="dialog"
-      aria-label={`${level.world} details`}
+      aria-label={`${level.space} details`}
       className="relative rounded-xl border bg-slate-950 p-4 shadow-2xl"
       style={{ borderColor: locked ? "#475569" : COLORS[level.accent] }}
       data-testid="level-panel"
@@ -114,7 +114,7 @@ function InfoPanel({ level, state, onPlay, onRevisit, onClose, inline = false })
         <span className="text-[9px] tracking-[0.2em] text-slate-500">{DIFFICULTY_LABELS[level.difficulty - 1]}</span>
       </div>
       <div className={`font-display mt-2 text-sm font-black tracking-wide ${locked ? "text-slate-400" : TEXT[level.accent]}`}>
-        LEVEL {level.n} // {level.world}
+        LEVEL {level.n} // {level.space}
       </div>
       <div className="mt-0.5 text-[11px] font-bold tracking-[0.15em] text-slate-200">{level.game}</div>
       <p className="mt-2 text-xs leading-relaxed text-slate-400">{level.description}</p>
@@ -153,7 +153,7 @@ function InfoPanel({ level, state, onPlay, onRevisit, onClose, inline = false })
   );
 }
 
-// One continuous illustrated world. The four level markers ARE the level selector.
+// One continuous illustrated space. The four level markers ARE the level selector.
 function WorldMap({ isUnlocked, isCompleted, completedCount, onEnterLevel, onOpenSection }) {
   const [openN, setOpenN] = useState(null);
   const [live, setLive] = useState(false);
@@ -183,27 +183,27 @@ function WorldMap({ isUnlocked, isCompleted, completedCount, onEnterLevel, onOpe
   const stateOf = (n) => (isCompleted(n) ? "completed" : isUnlocked(n) ? "unlocked" : "locked");
   const toggle = (n) => { sfx.click(); setOpenN((cur) => (cur === n ? null : n)); };
   const current = openN ? LEVELS.find((l) => l.n === openN) : null;
-  // a stable array, so the (large) artwork only re-renders when a world actually unlocks
+  // a stable array, so the (large) artwork only re-renders when a space actually unlocks
   const unlockedKey = [1, 2, 3, 4].map((n) => isUnlocked(n)).join(",");
   const unlocked = useMemo(() => unlockedKey.split(",").map((v) => v === "true"), [unlockedKey]);
 
   return (
-    <section ref={rootRef} id="world-map" className={`wm-root relative px-4 py-14 sm:px-8 ${live ? "wm-live" : ""}`} data-testid="rpg-world-map" aria-label="World map">
+    <section ref={rootRef} id="world-map" className={`wm-root relative px-4 py-14 sm:px-8 ${live ? "wm-live" : ""}`} data-testid="rpg-world-map" aria-label="Space map">
       <div className="relative z-10 mx-auto max-w-4xl">
         <div className="mb-8 text-center">
           <div className="mb-3 flex items-center justify-center gap-2 text-[10px] tracking-[0.4em] text-neon">
-            <MapIcon className="h-4 w-4" /> WORLD MAP
+            <MapIcon className="h-4 w-4" /> SPACE MAP
           </div>
           <h2 className="font-display text-3xl font-black text-white sm:text-4xl" data-testid="world-map-title">
-            CHOOSE YOUR <span className="text-neon text-glow-lime">WORLD</span>
+            CHOOSE YOUR <span className="text-neon text-glow-lime">SPACE</span>
           </h2>
           <p className="mt-3 text-xs text-slate-400 sm:text-sm">
-            Tap a glowing marker. Win a world to unlock the next.
+            Tap a glowing marker. Win a space to unlock the next.
           </p>
           <div className="mx-auto mt-5 max-w-md" data-testid="quest-progress">
             <div className="mb-1 flex justify-between text-[10px] tracking-widest text-slate-500">
               <span>QUEST PROGRESS</span>
-              <span className="text-neon">{completedCount}/4 WORLDS</span>
+              <span className="text-neon">{completedCount}/4 SPACES</span>
             </div>
             <div className="h-2 overflow-hidden rounded-full border border-slate-700 bg-slate-900">
               <div className="h-full origin-left bg-neon transition-transform duration-1000" style={{ transform: `scaleX(${completedCount / 4})`, width: "100%" }} />

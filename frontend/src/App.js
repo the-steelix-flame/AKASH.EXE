@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Home, Map } from "lucide-react";
 import { AgentProvider, useAgentActions } from "@/hooks/useAgent";
 import { AudioProvider, useAudioActions } from "@/hooks/useAudio";
+import { MusicController } from "@/hooks/useMusic";
 import { useProgress } from "@/hooks/useProgress";
 import { onConsentChange, setPage, track } from "@/utils/analytics";
 import { sfx } from "@/utils/sfx";
@@ -45,7 +46,7 @@ function PageFrame({ children, onMap, onHome }) {
       {children}
       <div className="flex flex-wrap items-center justify-center gap-3 border-t border-slate-800 px-4 py-10">
         <button onClick={onMap} data-testid="page-return-map-btn" className="flex items-center gap-2 rounded-md border-2 border-volt px-6 py-3 font-display text-xs font-bold tracking-[0.2em] text-volt transition-colors hover:bg-volt/10 focus:outline-none focus:ring-2 focus:ring-volt">
-          <Map className="h-4 w-4" /> RETURN TO WORLD MAP
+          <Map className="h-4 w-4" /> RETURN TO SPACE MAP
         </button>
         <button onClick={onHome} data-testid="page-home-btn" className="flex items-center gap-2 rounded-md border border-slate-600 px-6 py-3 font-display text-xs font-bold tracking-[0.2em] text-slate-300 transition-colors hover:border-neon hover:text-neon focus:outline-none focus:ring-2 focus:ring-neon">
           <Home className="h-4 w-4" /> HOME
@@ -209,6 +210,7 @@ function Game() {
       </motion.main>
 
       <AkashAgent />
+      <MusicController />
       <ConsentBanner onDetails={() => setPrivacyOpen(true)} />
       <PrivacyDialog open={privacyOpen} onClose={() => setPrivacyOpen(false)} />
     </div>

@@ -449,7 +449,7 @@ export default function Level3Shinobi({ onComplete, onBack, onHome }) {
                   <VictoryScreen
                     type="victory"
                     title="LEVEL COMPLETED"
-                    unlockText="NEW WORLD UNLOCKED // THE GROWTH KINGDOM"
+                    unlockText="NEW SPACE UNLOCKED // THE GROWTH KINGDOM"
                     message={resultsMessage(stageResults)}
                     story={NARRATION.level3_story.text}
                     onPlayStory={() => play("level3_story")}

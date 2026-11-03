@@ -485,7 +485,7 @@ export default function Level4Growth({ onComplete, onBack, onHome }) {
         <VictoryScreen
           type="victory"
           title="LEVEL COMPLETED"
-          unlockText="ALL FOUR WORLDS CLEARED"
+          unlockText="ALL FOUR SPACES CLEARED"
           message="The Kamehameha lands. 100,000 people reached, in simulation. Next: my real proposal."
           story={NARRATION.level4_story.text}
           onPlayStory={() => play("level4_story")}

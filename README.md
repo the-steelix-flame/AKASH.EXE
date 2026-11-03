@@ -65,11 +65,40 @@ frontend/public/images/characters/akash-agent.svg  OPTIONAL: your own art for th
 frontend/public/images/characters/pokemon/<id>.png OPTIONAL: art for pikachu, squirtle, onix, ...
 ```
 
+## Background music
+
+Soothing ambient music plays through the whole journey, on by default, and loops forever. It is generated live with the Web Audio
+API (slow pad chords with soft bell notes, `src/utils/ambient.js`), so there is no audio file to license or download. Browsers only
+allow sound after a click, tap or key press, so it starts by itself where the browser allows autoplay and otherwise on the visitor's
+first interaction. The nav has a music button (remembered per browser) and the existing mute button silences everything. The music
+ducks to about 30% while a narration clip speaks, and sleeps (no CPU) when switched off or when the tab is hidden.
+
+Want a real track instead? Put it at `frontend/public/audio/music/ambient.mp3` and it replaces the generated music (looped).
+
+## Scroll-driven 3D journeys (Know Me, My Builds, How I Think, Wispr Pitch)
+
+Each of the four portfolio pages is a scrollytelling journey: one sticky full-screen stage, and as you scroll a camera flies along a
+path of neon wireframe monuments (an entrance gate, a campus, a tower with a film reel, a podium and trophy, gears, a compass; an order
+book, a vase, an approval ledger, a looping knot; a brain, clipped bars, broken pillars, a bridge; a microphone, a crowd, a megaphone,
+a calendar...), one per waypoint, with that waypoint's story card fading in beside it. Nothing is an image or a model file: every
+monument is generated from code (`src/components/journey/monuments.js`, three.js lines) and the stage is `JourneyStage.jsx`.
+Edit the story in the section files (`src/components/sections/*`) or `data/*`; pick a monument per chapter with `monument: "gate"`
+(see the `MONUMENTS` list). The render loop only runs while a stage is on screen. Visitors with "reduce motion" on, or no WebGL, get
+the same stories as a plain stack. three.js is code-split and only downloads when a journey is about to show.
+
+## Level 1 rounds
+
+Round 1 is the Swiper challenge (say the magic words, 20 seconds). Round 2, "Look for it", is a bright cartoon jungle packed with the
+things I build with; find the one golden trophy (30 seconds, 3 wrong taps). Round 3 is a treasure map: five identical trails cross on
+their way up to five of my projects (Chronos, Kalakriti, DealFlow360, Reflow, ECHO); pick the trail that reaches Chronos (no timer,
+3 wrong trails; a new map every attempt). Then the final riddle. Layouts are seeded from `src/utils/rng.js`, so they differ every visit.
+Round 2 and 3 use an original explorer cast (`ExplorerCast.jsx`: Explorer Akash and the Trail Map), not any TV character.
+
 ## The flying Akash agent
 
 `AkashAgent.jsx` parks at the left edge for 10 seconds, glides to the right edge, parks for 10 seconds, glides back, and repeats.
 It speaks the narration one sentence at a time and short contextual lines from the levels (`useAgent().say("...")`). It is
-`pointer-events: none`, so it can never block a click, and it picks lanes that overlap the fewest buttons, inputs and headings,
+only reacts where the character itself is (its speech bubble and the space around it never block a click), and it picks lanes that overlap the fewest buttons, inputs and headings,
 re-checking every couple of seconds. No existing flying-Akash artwork was found in any supplied folder, so it is built on the same character engine as the other
 characters. Drop your own art at the path above to replace it.
 
@@ -105,12 +134,16 @@ Corrections made: removed the "BS Data Science, IIT Madras" line (not in the PDF
 LinkedIn/GitHub links with real ones; replaced five placeholder projects with the 14 real ones, strongest first; added the IntelGrader
 internship and the verified hackathon placements; replaced the generic "how I think" flow and the old tick-size story with your Chronos story.
 
-**Left out because the PDF says it can't be verified:** LeetCode "top 5% globally", WBJEE rank 1691, "finalist in 7+ national hackathons",
+**Left out because the PDF says it can't be verified:** LeetCode "top 5% globally", "finalist in 7+ national hackathons",
 and "20+ hackathons entered" (from the old site).
+
+**Added on request:** WBJEE (West Bengal JEE), All India Rank 1691 out of 150,000, from the resume shared in the chat
+(`groww_akash_kumar.pdf`). It shows as a chip and a timeline card on the Know Me page.
 
 **Please decide / confirm (not shown on the site until you do):**
 - Which email to show (`akash3571kumar@gmail.com` vs `akash9836566391@gmail.com`), and whether to add a resume PDF.
-- Class X/XII marks (two different sets in the PDF).
+- Schools and Class X/XII results. Add them to `SCHOOLS` in `frontend/src/data/personalData.js`
+  (`{ name, place, years, board, result }`); each one then appears on the Know Me page by itself. None are shown until real data is added.
 - Exact event dates for Kalakriti, DealFlow360 and Reflow (the PDF dates them Sep 2026 from commit history).
 - ECHO's model version (not named on the site because the sources disagree).
 - LeetCode contest rating 1800+ is shown (listed as safe in the PDF).

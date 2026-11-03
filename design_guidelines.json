@@ -29,12 +29,12 @@
     "rpg_world_map": "4 Level Cards (Interactive RPG Quest Hub with Locked/Unlocked/Completed states, status badges, difficulty meters, & completion progress 0-100%).",
     "audio_player_hud": "Fixed top/bottom Audio Narration bar with Web Audio waveform visualizer, dynamic subtitles/captions, play/pause/replay/mute, & speed controls.",
     "voice_input_hud": "Wispr Flow compatible dictation bar with live audio visualizer, mic pulse indicator, fallback typing input, & voice command shortcuts ('SELECT POKEMON', 'ALLOCATE CHAKRA', 'LAUNCH CAMPAIGN').",
-    "persistent_nav": "Header with '4/4 WORLDS UNLOCKED' progress counter, fast-travel level links, reset quest option, & downloadable resume action.",
+    "persistent_nav": "Header with '4/4 SPACES UNLOCKED' progress counter, fast-travel level links, reset quest option, & downloadable resume action.",
     "quest_completed_modal": "Victory Kamehameha celebration sequence, unlocked full portfolio view, and direct CTA to book interview / connect with Akash."
   },
   "level_design_breakdown": {
     "level_1_swiper_challenge": {
-      "name": "Level 1: The Origin World / Swiper's Challenge",
+      "name": "Level 1: The Origin Space / Swiper's Challenge",
       "theme": "Cyber-Jungle (Dora inspired)",
       "gameplay": "Voice-shouting & fast dictation challenge. Swipe away 'Swiper the Growth Thief' by dictating / typing growth mantras ('Swiper No Swiping', 'Growth Mindset', 'Wispr Flow Speed').",
       "unlocks_portfolio_section": "Know Me (Akash's Bio, Mission Statement, Early Foundations & Growth DNA)"

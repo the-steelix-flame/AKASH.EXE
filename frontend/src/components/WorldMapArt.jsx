@@ -1,6 +1,6 @@
 import { memo } from "react";
 
-// The illustrated world behind the level markers. Static SVG: gradients, patterns and layered shapes only
+// The illustrated space behind the level markers. Static SVG: gradients, patterns and layered shapes only
 // (no filters), so it stays cheap. The only motion is CSS transform / opacity / dash-offset animation,
 // which index.css pauses whenever the map is scrolled out of view.
 //
@@ -237,7 +237,7 @@ function WorldMapArt({ unlocked = [true, false, false, false] }) {
       <Terrain />
       <Island />
 
-      {/* trails: worn dirt roads; neon once the next world is open */}
+      {/* trails: worn dirt roads; neon once the next space is open */}
       {TRAILS.map((d, i) => (
         <g key={i}>
           <path d={d} fill="none" stroke="#1c1208" strokeWidth="17" strokeLinecap="round" opacity="0.55" />
@@ -250,7 +250,7 @@ function WorldMapArt({ unlocked = [true, false, false, false] }) {
         <g key={i}><rect x={x - 1.5} y={y - 22} width="3" height="22" fill="#78350f" /><rect x={x - 12} y={y - 28} width="24" height="10" rx="2" fill="#a16207" /><path d={`M${x - 8} ${y - 23}h16`} stroke="#fde68a" strokeWidth="1.5" /></g>
       ))}
 
-      {/* fog over worlds you haven't reached yet */}
+      {/* fog over spaces you haven't reached yet */}
       {!unlocked[1] && <Fog id="2" cx={745} cy={490} rx={270} ry={230} />}
       {!unlocked[2] && <Fog id="3" cx={265} cy={850} rx={270} ry={190} />}
       {!unlocked[3] && <Fog id="4" cx={735} cy={1075} rx={250} ry={190} />}

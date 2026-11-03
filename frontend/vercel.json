@@ -1,0 +1,3 @@
+{
+  "rewrites": [{ "source": "/((?!api/|static/|images/|videos/|audio/|.*\\..*).*)", "destination": "/index.html" }]
+}

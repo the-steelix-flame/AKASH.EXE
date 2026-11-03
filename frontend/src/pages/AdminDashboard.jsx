@@ -228,7 +228,7 @@ export default function AdminDashboard() {
             </Card>
 
             <div className="grid gap-4 lg:grid-cols-3">
-              <Card title="SWIPER CHALLENGE">
+              <Card title="LEVEL 1 ROUNDS (1 SWIPER, 2 LOOK FOR IT, 3 MAP)">
                 <Table cols={[{ k: "round", h: "ROUND" }, { k: "ok", h: "WON" }, { k: "fail", h: "LOST" }, { h: "SUCCESS", k: "s", f: (r) => `${r.success_rate}%` }]} rows={d.swiper.rounds} />
                 <div className="mt-3 text-[10px] text-slate-500">FAILURE REASONS</div><Rank rows={d.swiper.failure_reasons} />
                 <div className="mt-3 text-[10px] text-slate-500">HOW SUCCESS WAS ENTERED</div><Rank rows={d.swiper.input_sources} />
