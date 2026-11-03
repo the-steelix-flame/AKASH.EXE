@@ -43,14 +43,26 @@ const ln = (a, b, t) => { const o = new Float32Array([a[0], a[1], a[2] || 0, b[0
 // a w x h grid of lines in the XY plane
 const gridXY = (w, h, nx, ny, t) => { const o = []; for (let i = 0; i <= nx; i += 1) o.push(ln([-w / 2 + (w * i) / nx, -h / 2], [-w / 2 + (w * i) / nx, h / 2])); for (let j = 0; j <= ny; j += 1) o.push(ln([-w / 2, -h / 2 + (h * j) / ny], [w / 2, -h / 2 + (h * j) / ny])); return xf(merge(o), t); };
 
+// Glow without post-processing: every neon object is drawn as a thin bright core plus one or two wider, faint copies of itself
+// (additive blending, so overlapping lines bloom brighter). The halos are children of the core, so they move, spin and scale
+// with it, and a setter on the core's opacity keeps them fading in step with it.
+let GLOW = 2; // 0 = off, 1 = one halo (phones), 2 = two halos
+export const setGlow = (v) => { GLOW = v; };
+const HALOS = { 1: [[4, 0.22]], 2: [[3.4, 0.22], [8.5, 0.1]] };
+const MINT = 0x6dffc4; // white structures glow mint-green, so the whole scene reads as neon
 export function neon(arrs, color, width = 1.7, opacity = 0.95) {
   const g = new LineSegmentsGeometry();
   g.setPositions(merge(arrs));
-  const m = new LineMaterial({ color, linewidth: width, transparent: true, opacity, depthWrite: false, blending: THREE.AdditiveBlending, worldUnits: false });
-  m.fog = true;
-  const l = new LineSegments2(g, m);
-  l.frustumCulled = false;
-  return l;
+  const mk = (lw, op, c = color) => new LineMaterial({ color: c, linewidth: lw, transparent: true, opacity: op, depthWrite: false, blending: THREE.AdditiveBlending, worldUnits: false });
+  const m = mk(width, opacity); m.fog = true;
+  const core = new LineSegments2(g, m);
+  core.frustumCulled = false;
+  const halos = (HALOS[GLOW] || []).map(([k, a]) => { const hm = mk(width * k, opacity * a, color === COLORS.white ? MINT : color); hm.fog = true; const h = new LineSegments2(g, hm); h.frustumCulled = false; h.userData.k = a; core.add(h); return h; });
+  if (halos.length) {
+    let op = opacity;
+    Object.defineProperty(m, "opacity", { get: () => op, set: (v) => { op = v; halos.forEach((h) => { h.material.opacity = v * h.userData.k; }); }, configurable: true });
+  }
+  return core;
 }
 const W = COLORS.white;
 const wrap = (...objs) => { const g = new THREE.Group(); objs.forEach((o) => g.add(o)); return g; };

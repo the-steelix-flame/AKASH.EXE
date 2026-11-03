@@ -1,6 +1,6 @@
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
-import { buildMonument, COLORS } from "@/components/journey/monuments";
+import { buildMonument, COLORS, setGlow } from "@/components/journey/monuments";
 import { makeRng } from "@/utils/rng";
 
 // A scroll-driven 3D journey ("scrollytelling"). A tall section holds one sticky full-screen stage. As the visitor scrolls,
@@ -69,6 +69,7 @@ function JourneyStage({ chapters, title, kicker, testId = "journey", hint = "SCR
     // away, its neighbours when the browser is idle), so opening a journey never stalls on building every monument.
     const lineMats = [];
     let W = 1; let H = 1; let mobile = false;
+    setGlow(stage.clientWidth < 768 ? 1 : 2); // lighter glow on phones
     const mons = new Array(N).fill(null);
     const get = (i) => {
       if (mons[i]) return mons[i];
@@ -94,9 +95,16 @@ function JourneyStage({ chapters, title, kicker, testId = "journey", hint = "SCR
     const rng = makeRng(42);
     const starPos = new Float32Array(1500 * 3);
     for (let i = 0; i < 1500; i += 1) { starPos[i * 3] = (rng() - 0.5) * 700; starPos[i * 3 + 1] = 10 + rng() * 220; starPos[i * 3 + 2] = (rng() - 0.5) * 700; }
+    const sprite = (() => { const c = document.createElement("canvas"); c.width = c.height = 64; const x = c.getContext("2d"); const gr = x.createRadialGradient(32, 32, 0, 32, 32, 32); gr.addColorStop(0, "rgba(255,255,255,1)"); gr.addColorStop(0.25, "rgba(190,255,210,0.65)"); gr.addColorStop(1, "rgba(190,255,210,0)"); x.fillStyle = gr; x.fillRect(0, 0, 64, 64); const t = new THREE.CanvasTexture(c); return t; })();
     const sg = new THREE.BufferGeometry(); sg.setAttribute("position", new THREE.BufferAttribute(starPos, 3));
-    const stars = new THREE.Points(sg, new THREE.PointsMaterial({ color: 0xbfffd2, size: 1.3, transparent: true, opacity: 0.7, sizeAttenuation: true, fog: false, depthWrite: false }));
+    const stars = new THREE.Points(sg, new THREE.PointsMaterial({ map: sprite, color: 0xbfffd2, size: 4.2, transparent: true, opacity: 0.85, sizeAttenuation: true, fog: false, depthWrite: false, blending: THREE.AdditiveBlending }));
     scene.add(stars);
+    const bigPos = new Float32Array(70 * 3); for (let i = 0; i < 70; i += 1) { bigPos[i * 3] = (rng() - 0.5) * 700; bigPos[i * 3 + 1] = 20 + rng() * 200; bigPos[i * 3 + 2] = (rng() - 0.5) * 700; }
+    const bg = new THREE.BufferGeometry(); bg.setAttribute("position", new THREE.BufferAttribute(bigPos, 3));
+    const bigStars = new THREE.Points(bg, new THREE.PointsMaterial({ map: sprite, color: 0x7dffb0, size: 14, transparent: true, opacity: 0.32, sizeAttenuation: true, fog: false, depthWrite: false, blending: THREE.AdditiveBlending }));
+    scene.add(bigStars);
+    const grid2 = new THREE.GridHelper(900, 30, 0x39ff14, 0x39ff14); // a wider, fainter grid under the fine one: the floor glows too
+    grid2.material.transparent = true; grid2.material.opacity = 0.2; grid2.material.depthWrite = false; grid2.position.y = -0.25; scene.add(grid2);
 
     const resize = () => {
       W = stage.clientWidth || 1; H = stage.clientHeight || 1; mobile = W < 768;
@@ -139,7 +147,8 @@ function JourneyStage({ chapters, title, kicker, testId = "journey", hint = "SCR
       curSide += (side - curSide) * 0.25;
       if (mobile) camera.setViewOffset(W, H, 0, H * 0.2, W, H); else camera.setViewOffset(W, H, -curSide * W * 0.15, 0, W, H);
       grid.position.x = Math.round(pos.x / 6) * 6; grid.position.z = Math.round(pos.z / 6) * 6;
-      stars.position.set(pos.x, 0, pos.z);
+      stars.position.set(pos.x, 0, pos.z); bigStars.position.set(pos.x, 0, pos.z);
+      grid2.position.x = Math.round(pos.x / 30) * 30; grid2.position.z = Math.round(pos.z / 30) * 30;
       for (let k = Math.max(0, i - 1); k <= Math.min(N - 1, i + 1); k += 1) mons[k]?.update?.(t);
       renderer.render(scene, camera);
 
@@ -166,7 +175,7 @@ function JourneyStage({ chapters, title, kicker, testId = "journey", hint = "SCR
       alive = false; cancelAnimationFrame(raf); raf = 0; visible = false;
       io.disconnect(); ro.disconnect();
       document.removeEventListener("visibilitychange", onVis);
-      scene.traverse((o) => { o.geometry?.dispose?.(); if (o.material) (Array.isArray(o.material) ? o.material : [o.material]).forEach((m) => m.dispose?.()); });
+      scene.traverse((o) => { o.geometry?.dispose?.(); if (o.material) (Array.isArray(o.material) ? o.material : [o.material]).forEach((m) => { m.map?.dispose?.(); m.dispose?.(); }); });
       renderer.dispose(); renderer.forceContextLoss?.();
     };
   }, [mode, chapters, N]);
